@@ -6,7 +6,6 @@ Posts = new Mongo.Collection('posts');
 //     return !! userId;
 //   }
 // });
-
 Meteor.methods({
   postInsert: function(postAttributes) {
     check(Meteor.userId(), String);
