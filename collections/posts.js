@@ -6,7 +6,7 @@ Posts = new Mongo.Collection('posts');
 //     return !! userId;
 //   }
 // });
-
+//添加基本权限来检查帖子的拥有者
 Posts.allow({
   update: function(userId, post) { return ownsDocument(userId, post); },
   remove: function(userId, post) { return ownsDocument(userId, post); }
