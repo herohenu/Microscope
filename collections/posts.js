@@ -6,6 +6,12 @@ Posts = new Mongo.Collection('posts');
 //     return !! userId;
 //   }
 // });
+
+Posts.allow({
+  update: function(userId, post) { return ownsDocument(userId, post); },
+  remove: function(userId, post) { return ownsDocument(userId, post); }
+});
+
 Meteor.methods({
   postInsert: function(postAttributes) {
     check(Meteor.userId(), String);
