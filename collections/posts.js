@@ -18,7 +18,7 @@ Posts.deny({
     return (_.without(fieldNames, 'url', 'title').length > 0);
   }
 });
-
+//当编辑时，验证帖子内容。
 Posts.deny({
   update: function(userId, post, fieldNames, modifier) {
     var errors = validatePost(modifier.$set);
