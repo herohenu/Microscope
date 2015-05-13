@@ -59,8 +59,7 @@ Meteor.methods({
   upvote: function(postId){
     check(this.userId,String);
     check(postId,String);
-    var post = Posts.findOne(postId);
-  
+    var post = Posts.findOne(postId);  
     if (!post)
       throw new Meteor.Error('invalid','Post not found');
     if (_.include(post.upvoters,this.userId))
