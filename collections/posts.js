@@ -1,12 +1,6 @@
 // Posts scope is 
 Posts = new Mongo.Collection('posts');
-// Posts.allow({
-//   insert: function(userId, doc) {
-//     // 只允许登录用户添加帖子
-//     return !! userId;
-//   }
-// });
-//添加基本权限来检查帖子的拥有者
+
 Posts.allow({
   update: function(userId, post) { return ownsDocument(userId, post); },
   remove: function(userId, post) { return ownsDocument(userId, post); }
@@ -61,5 +55,19 @@ Meteor.methods({
     return {
       _id: postId
     };
+  },
+  upvote: function(postId){
+    check(this.userId,String);
+    check(postId,String);
+    var post = Posts.findOne(postId);
+  
+    if (!post)
+      throw new Meteor.Error('invalid','Post not found');
+    if (_.include(post.upvoters,this.userId))
+      throw new Meteor.Error('invalid','Already upvoted this post')
+    Posts.update(post._id,{
+      $addToSet: {upvoters:this.userId},
+      $inc:  {votes: 1}
+    })
   }
 });
