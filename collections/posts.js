@@ -59,6 +59,19 @@ Meteor.methods({
   upvote: function(postId) {
     check(this.userId, String);
     check(postId, String);
+    
+    var affected = Posts.update({
+      _id: postId,
+      upvoters: {$ne: this.userId}
+    }, {
+      $addToSet: {upvoters: this.userId},
+      $inc: {votes: 1}
+    });
+
+   if (! affected)
+      throw new Meteor.Error('invalid', "You weren't able to upvote that post");
+  
+
     var post = Posts.findOne(postId);
     if (!post)
       throw new Meteor.Error('invalid', 'Post not found');
